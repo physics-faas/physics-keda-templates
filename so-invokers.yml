@@ -1,0 +1,18 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: scaler-invokers
+  namespace: openwhisk
+spec:
+  scaleTargetRef:
+    name: owdev-invoker
+    apiVersion: apps/v1
+    kind: StatefulSet
+  minReplicaCount: 2
+  maxReplicaCount: 3
+  triggers:
+  - type: kubernetes-workload
+    metadata:
+      podSelector: 'user-action-pod=true'
+      value: '5'
+

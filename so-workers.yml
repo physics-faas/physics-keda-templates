@@ -1,0 +1,15 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: scaler-workers
+  namespace: openwhisk
+spec:
+  scaleTargetRef:
+    name: machineset-gw-source
+  minReplicaCount: 1
+  maxReplicaCount: 2
+  triggers:
+  - type: kubernetes-workload
+    metadata:
+      podSelector: 'invoker=invoker0'
+      value: '4'

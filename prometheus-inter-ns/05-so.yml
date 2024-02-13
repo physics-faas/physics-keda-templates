@@ -1,0 +1,24 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: prom-scaledobject-deployment
+  namespace: openshift-machine-api
+spec:
+  scaleTargetRef:
+    name: my-deployment
+  minReplicaCount: 1
+  maxReplicaCount: 2
+  triggers:
+  - type: prometheus 
+    metadata:
+      serverAddress: https://thanos-querier.openshift-monitoring.svc.cluster.local:9092 
+      namespace: openwhisk
+      metricName: http_requests_total 
+      threshold: '18' 
+      query: count(kube_pod_info{namespace='openwhisk'}) by (namespace) 
+      authModes: bearer
+      ignoreNullValues: "false" 
+      unsafeSsl: "false"
+    authenticationRef:
+      name: keda-trigger-auth-prometheus
+      kind: TriggerAuthentication

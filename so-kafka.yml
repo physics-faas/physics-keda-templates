@@ -1,0 +1,20 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: kafka-openwhiskinvoker-consumer-scaledobject
+spec:
+  minReplicaCount: 1
+  maxReplicaCount: 2
+  cooldownPeriod: 5
+  pollingInterval: 10
+  scaleTargetRef:
+    name: my-deployment
+    #apiVersion: apps/v1
+    #kind: StatefulSet
+  triggers:
+  - type: kafka
+    metadata:
+      bootstrapServers: owdev-kafka.openwhisk.svc.cluster.local:9092
+      consumerGroup: invoker0
+      lagThreshold: '5'
+      offsetResetPolicy: 'latest'

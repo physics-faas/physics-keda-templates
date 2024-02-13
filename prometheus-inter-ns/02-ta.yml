@@ -1,0 +1,13 @@
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: keda-trigger-auth-prometheus
+  namespace: openshift-machine-api
+spec:
+  secretTargetRef: 
+  - parameter: bearerToken 
+    name: keda-token-fnz9n
+    key: token 
+  - parameter: ca
+    name: keda-token-fnz9n
+    key: ca.crt
